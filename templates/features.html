@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block title %}Features - Research Paper Analyzer{% endblock %}
+
+{% block content %}
+<section>
+    <h2>Key Features</h2>
+    <div class="features-container">
+        <div class="feature-card">
+            <i class="fa-solid fa-file-pdf"></i>
+            <h3>PDF Analysis</h3>
+            <p>Analyze PDFs instantly with AI tools. Automatic section detection and content extraction.</p>
+        </div>
+        <div class="feature-card">
+            <i class="fa-solid fa-file-lines"></i>
+            <h3>Summary Generation</h3>
+            <p>Generate detailed summaries for each topic using advanced language models.</p>
+        </div>
+        <div class="feature-card">
+            <i class="fa-solid fa-chart-simple"></i>
+            <h3>Topic Modeling</h3>
+            <p>Discover key topics and trends from papers with intelligent structure analysis.</p>
+        </div>
+        <div class="feature-card">
+            <i class="fa-solid fa-key"></i>
+            <h3>Citation Extraction</h3>
+            <p>Organize references and citations automatically for research workflow.</p>
+        </div>
+        <div class="feature-card">
+            <i class="fa-solid fa-robot"></i>
+            <h3>AI Q&A</h3>
+            <p>Ask contextual questions and get accurate RAG-powered responses.</p>
+        </div>
+        <div class="feature-card">
+            <i class="fa-solid fa-language"></i>
+            <h3>Multi-Language</h3>
+            <p>Summary translation in English and Hindi for broader accessibility.</p>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    setActiveNav('features');
+});
+</script>
+{% endblock %}
+

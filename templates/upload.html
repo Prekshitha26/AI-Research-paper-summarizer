@@ -1,0 +1,229 @@
+{% extends "base.html" %}
+
+{% block title %}Upload - Research Paper Analyzer{% endblock %}
+
+{% block content %}
+<section class="upload-section">
+    <h2>Upload Your Research Paper</h2>
+    
+    <div class="upload-card" id="uploadCard">
+        <div class="upload-icon"><i class="fa-solid fa-cloud-arrow-up"></i></div>
+        <p>Drag & Drop your PDF here<br>or click to browse</p>
+    </div>
+    <input type="file" id="pdfFile" accept=".pdf" style="display:none;">
+
+    <div class="progress-container" id="progressContainer" style="display:none;">
+        <div class="progress-bar" id="progressBar"></div>
+    </div>
+
+    <!-- Topics Dropdown -->
+    <div id="topicSection" style="display:none;">
+        <label for="topicSelect" style="color:#fff;font-size:1.2em;">Select Topic:</label>
+        <select id="topicSelect"></select>
+        <button onclick="showTopicSummary()">Show Summary</button>
+    </div>
+
+    <!-- Summary -->
+    <div class="summary" id="summarySection" style="display:none;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <h3 id="summaryTitle">Summary</h3>
+            <div>
+                <button id="langToggle" class="language-toggle" onclick="toggleLanguage()">हिंदी (Hindi)</button>
+            </div>
+        </div>
+        <div id="summaryContent"></div>
+        <div style="margin-top: 30px; text-align: center;">
+            <button id="readAloudBtn" onclick="toggleReadAloud()" style="background: #ff6b6b; color: white; padding: 12px 24px; border: none; border-radius: 25px; cursor: pointer; margin-right: 15px;">
+                <i class="fa-solid fa-volume-high"></i> <span id="readStatus">Read Aloud</span>
+            </button>
+            <button onclick="downloadSummary()" style="background: #4ecdc4; color: white; padding: 12px 24px; border: none; border-radius: 25px; cursor: pointer;">
+                <i class="fa-solid fa-download"></i> Download PDF
+            </button>
+        </div>
+    </div>
+
+    <div style="text-align: center; margin-top: 30px;">
+        <a href="{{ url_for('qa') }}" style="color: #00bcd4; font-weight: 600; text-decoration: none;">
+            Ask Questions → 
+        </a>
+        <span style="color: #aaa;">|</span>
+        <a href="{{ url_for('visualization') }}" style="color: #00bcd4; font-weight: 600; text-decoration: none;">
+            View Visualizations →
+        </a>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+let topics = {};
+let currentSummary = '';
+let isHindi = false;
+let readAloudActive = false;
+let currentUtterance = null;
+
+const uploadCard = document.getElementById('uploadCard');
+const fileInput = document.getElementById('pdfFile');
+const progressContainer = document.getElementById('progressContainer');
+const progressBar = document.getElementById('progressBar');
+const topicSection = document.getElementById('topicSection');
+const topicSelect = document.getElementById('topicSelect');
+const summarySection = document.getElementById('summarySection');
+const summaryContent = document.getElementById('summaryContent');
+const langToggle = document.getElementById('langToggle');
+const readAloudBtn = document.getElementById('readAloudBtn');
+const readStatus = document.getElementById('readStatus');
+const summaryTitle = document.getElementById('summaryTitle');
+
+// Drag & Drop
+uploadCard.addEventListener('click', () => fileInput.click());
+uploadCard.addEventListener('dragover', (e) => {
+    e.preventDefault();
+    uploadCard.style.background = 'rgba(255,255,255,0.15)';
+});
+uploadCard.addEventListener('dragleave', (e) => {
+    e.preventDefault();
+    uploadCard.style.background = 'rgba(255,255,255,0.05)';
+});
+uploadCard.addEventListener('drop', (e) => {
+    e.preventDefault();
+    uploadCard.style.background = 'rgba(255,255,255,0.05)';
+    fileInput.files = e.dataTransfer.files;
+    handleFile();
+});
+fileInput.addEventListener('change', handleFile);
+
+function handleFile() {
+    const file = fileInput.files[0];
+    if (!file) return;
+    
+    progressContainer.style.display = 'block';
+    progressBar.style.width = '0%';
+    topicSection.style.display = 'none';
+    summarySection.style.display = 'none';
+
+    let width = 0;
+    const interval = setInterval(() => {
+        if (width >= 100) {
+            clearInterval(interval);
+            const formData = new FormData();
+            formData.append('file', file);
+            fetch('/upload', { method: 'POST', body: formData })
+            .then(res => res.json())
+            .then(data => {
+                topicSelect.innerHTML = '';
+                data.topics.forEach(t => {
+                    const opt = document.createElement('option');
+                    opt.value = t;
+                    opt.textContent = t;
+                    topicSelect.appendChild(opt);
+                });
+                topicSection.style.display = 'block';
+                topics = data.topics.reduce((acc, t) => ({...acc, [t]: ''}), {});
+            });
+        } else {
+            width += 10;
+            progressBar.style.width = width + '%';
+        }
+    }, 200);
+}
+
+function showTopicSummary() {
+    const topic = topicSelect.value;
+    if (!topic) return;
+    
+    fetch('/summary', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({topic})
+    })
+    .then(res => res.json())
+    .then(data => {
+        currentSummary = data.summary || "No summary available.";
+        isHindi = false;
+        langToggle.textContent = 'हिंदी (Hindi)';
+        langToggle.classList.remove('active');
+        displaySummary(currentSummary);
+        summarySection.style.display = 'block';
+    });
+}
+
+function toggleLanguage() {
+    if (!currentSummary) return;
+    
+    if (!isHindi) {
+        fetch('/translate_summary', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({summary: currentSummary})
+        })
+        .then(res => res.json())
+        .then(data => {
+            currentSummary = data.hindi_summary || currentSummary;
+            isHindi = true;
+            langToggle.textContent = 'English';
+            langToggle.classList.add('active');
+            summaryTitle.textContent = 'सारांश (Summary)';
+            displaySummary(currentSummary);
+        });
+    } else {
+        isHindi = false;
+        langToggle.textContent = 'हिंदी (Hindi)';
+        langToggle.classList.remove('active');
+        summaryTitle.textContent = 'Summary';
+        displaySummary(currentSummary);
+    }
+}
+
+function displaySummary(text) {
+    summaryContent.innerHTML = formatSummary(text);
+}
+
+function toggleReadAloud() {
+    if (!readAloudActive) {
+        const text = summaryContent.textContent;
+        if (!text) return;
+        
+        currentUtterance = new SpeechSynthesisUtterance(text);
+        currentUtterance.rate = 0.9;
+        currentUtterance.onend = () => {
+            readAloudActive = false;
+            readStatus.textContent = 'Read Aloud';
+            readAloudBtn.style.background = '#ff6b6b';
+        };
+        speechSynthesis.speak(currentUtterance);
+        readAloudActive = true;
+        readStatus.textContent = 'Stop';
+        readAloudBtn.style.background = '#f44336';
+    } else {
+        speechSynthesis.cancel();
+        readAloudActive = false;
+        readStatus.textContent = 'Read Aloud';
+        readAloudBtn.style.background = '#ff6b6b';
+    }
+}
+
+function downloadSummary() {
+    const topic = topicSelect.value;
+    fetch('/generate_pdf', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({summary: currentSummary})
+    })
+    .then(response => response.blob())
+    .then(blob => {
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `summary_${topic.replace(/\s+/g, '_')}_${isHindi ? 'hindi' : 'english'}.pdf`;
+        a.click();
+        URL.revokeObjectURL(url);
+    });
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    setActiveNav('upload');
+});
+</script>
+{% endblock %}
+

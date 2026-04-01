@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block title %}Home - Research Paper Analyzer{% endblock %}
+
+{% block content %}
+<!-- HERO / HOME PAGE -->
+<section class="hero">
+    <div class="hero-content">
+        <h1>Effortless Research Paper Analysis</h1>
+        <p>Upload, summarize, and explore insights from academic papers using AI-powered tools.</p>
+        <a href="{{ url_for('upload') }}"><button>Upload Paper</button></a>
+    </div>
+</section>
+
+<section style="padding: 80px 50px; text-align: center;">
+    <h2>Welcome to ResearchPortal</h2>
+    <p style="max-width: 800px; margin: 0 auto 40px; font-size: 1.2em; line-height: 1.8;">
+        Transform complex research papers into clear insights. Our AI analyzes structure, generates summaries, 
+        answers questions, and visualizes trends - all in one platform.
+    </p>
+    <div style="display: flex; justify-content: center; gap: 20px; flex-wrap: wrap;">
+        <a href="{{ url_for('features') }}" style="color: #00bcd4; font-weight: 600; padding: 12px 24px; border: 2px solid #00bcd4; border-radius: 30px; transition: 0.3s;">View Features</a>
+        <a href="{{ url_for('about') }}" style="color: #fff; font-weight: 600; padding: 12px 24px; background: #ff6f61; border-radius: 30px; transition: 0.3s;">Learn More</a>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    setActiveNav('home');
+});
+</script>
+{% endblock %}
+

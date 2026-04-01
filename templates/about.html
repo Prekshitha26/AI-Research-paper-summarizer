@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block title %}About - Research Paper Analyzer{% endblock %}
+
+{% block content %}
+<section id="about" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: #fff;">
+    <div style="max-width: 900px; margin: 0 auto; text-align: center; padding: 80px 50px;">
+        <h2 style="font-size: 2.8em; margin-bottom: 30px; text-shadow: 2px 2px 10px rgba(0,0,0,0.3);">About The Project</h2>
+        <p style="font-size: 1.3em; line-height: 1.8; margin-bottom: 40px;">
+            ResearchPortal is an AI-powered platform that leverages state-of-the-art language models and RAG (Retrieval-Augmented Generation) 
+            to analyze research papers, generate detailed summaries, answer contextual questions, and visualize key insights.
+        </p>
+        
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 40px; margin-top: 60px;">
+            <div style="background: rgba(255,255,255,0.1); padding: 30px; border-radius: 20px; backdrop-filter: blur(10px);">
+                <i class="fa-solid fa-brain" style="font-size: 3em; color: #00bcd4; margin-bottom: 20px;"></i>
+                <h3 style="margin-bottom: 15px; color: #fff;">AI-Powered Analysis</h3>
+                <p>Advanced NLP and Groq-powered LLMs for accurate section detection, summarization, and semantic understanding.</p>
+            </div>
+            <div style="background: rgba(255,255,255,0.1); padding: 30px; border-radius: 20px; backdrop-filter: blur(10px);">
+                <i class="fa-solid fa-database" style="font-size: 3em; color: #ff6f61; margin-bottom: 20px;"></i>
+                <h3 style="margin-bottom: 15px; color: #fff;">Vector RAG</h3>
+                <p>Retrieval-Augmented Generation ensures contextually accurate answers using embeddings and vector databases.</p>
+            </div>
+            <div style="background: rgba(255,255,255,0.1); padding: 30px; border-radius: 20px; backdrop-filter: blur(10px);">
+                <i class="fa-solid fa-chart-mixed" style="font-size: 3em; color: #4ecdc4; margin-bottom: 20px;"></i>
+                <h3 style="margin-bottom: 15px; color: #fff;">Visual Insights</h3>
+                <p>Interactive charts and trend analysis to visualize keywords, topics, and content distribution patterns.</p>
+            </div>
+        </div>
+        
+        <div style="margin-top: 60px; padding: 30px; background: rgba(0,0,0,0.3); border-radius: 20px;">
+            <h3 style="margin-bottom: 20px; color: #00bcd4;">Tech Stack</h3>
+            <p style="font-size: 1.1em;">
+                Flask • LangChain • Groq LLM • HuggingFace Embeddings • Chart.js • RAG Pipeline
+            </p>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    setActiveNav('about');
+});
+</script>
+{% endblock %}
+

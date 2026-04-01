@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+
+{% block title %}Q&A - Research Paper Analyzer{% endblock %}
+
+{% block content %}
+<section class="upload-section" style="min-height: 80vh;">
+    <h2 style="color: #fff; margin-bottom: 20px;">Ask Questions About Your Research Paper</h2>
+    <p style="color: #ddd; max-width: 700px; margin: 0 auto 40px; text-align: center;">
+        Have a specific question about the uploaded document? Our AI will provide contextually accurate answers.
+    </p>
+    
+    {% if not session.get('full_text') %}
+    <div style="text-align: center; padding: 60px; background: rgba(255,255,255,0.05); border-radius: 20px; border: 2px dashed rgba(255,255,255,0.3); max-width: 600px; margin: 50px auto;">
+        <i class="fa-solid fa-upload" style="font-size: 4em; color: #00bcd4; margin-bottom: 20px;"></i>
+        <h3 style="color: #fff; margin-bottom: 15px;">No Document Found</h3>
+        <p style="color: #ccc; margin-bottom: 30px;">Please <a href="{{ url_for('upload') }}" style="color: #00bcd4;">upload a research paper</a> first to start asking questions.</p>
+        <a href="{{ url_for('upload') }}" class="btn-primary" style="display: inline-block; padding: 12px 30px; background: #ff6f61; color: white; border-radius: 25px; text-decoration: none; transition: 0.3s;">
+            Go to Upload
+        </a>
+    </div>
+    {% else %}
+    <div id="chatSection" style="max-width: 900px; margin: 0 auto;">
+        <h3 style="color: #fff; text-align: center; margin-bottom: 25px;">Research Paper Q&A</h3>
+        <div id="chatBox"></div>
+        <div style="margin-top: 20px; display: flex; gap: 10px;">
+            <input type="text" id="chatInput" placeholder="Type your question about the paper..." style="flex: 1; padding: 15px; border-radius: 25px; border: none; font-size: 1em;">
+            <button onclick="sendChat()" style="padding: 15px 30px; background: #00bcd4; color: white; border: none; border-radius: 25px; cursor: pointer; font-size: 1em; transition: 0.3s;">
+                <i class="fa-solid fa-paper-plane"></i> Send
+            </button>
+        </div>
+    </div>
+    {% endif %}
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+let chatBox = document.getElementById('chatBox') || null;
+let chatInput = document.getElementById('chatInput') || null;
+
+function sendChat() {
+    if (!chatInput || !chatBox) return;
+    
+    const msg = chatInput.value.trim();
+    if (!msg) return;
+
+    // User message
+    const userMsg = document.createElement('div');
+    userMsg.className = 'chat-message chat-user';
+    userMsg.innerHTML = `<i class="fa-solid fa-user"></i> ${msg}`;
+    chatBox.appendChild(userMsg);
+    chatBox.scrollTop = chatBox.scrollHeight;
+    chatInput.value = '';
+
+    // AI response
+    fetch('/chat', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({message: msg})
+    })
+    .then(res => res.json())
+    .then(data => {
+        const aiMsg = document.createElement('div');
+        aiMsg.className = 'chat-message chat-ai';
+        aiMsg.innerHTML = `<i class="fa-solid fa-robot"></i> ${data.response}`;
+        chatBox.appendChild(aiMsg);
+        chatBox.scrollTop = chatBox.scrollHeight;
+    })
+    .catch(error => {
+        const errorMsg = document.createElement('div');
+        errorMsg.className = 'chat-message chat-ai';
+        errorMsg.innerHTML = '<i class="fa-solid fa-exclamation-triangle"></i> Sorry, I encountered an error. Please try again.';
+        errorMsg.style.background = '#ff6b6b';
+        errorMsg.style.color = 'white';
+        chatBox.appendChild(errorMsg);
+        chatBox.scrollTop = chatBox.scrollHeight;
+    });
+}
+
+// Enter to send
+if (chatInput) {
+    chatInput.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            sendChat();
+        }
+    });
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    setActiveNav('qa');
+});
+</script>
+{% endblock %}
+

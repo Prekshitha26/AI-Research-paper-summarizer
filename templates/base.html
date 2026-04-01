@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Research Paper Analyzer{% endblock %}</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <!-- AUTH MODAL -->
+    <div id="authSection" style="position:fixed; inset:0; display:flex; justify-content:center; align-items:center; background:rgba(0,0,0,0.75); z-index:2000;">
+        <div style="width: 360px; background:#0d1b51; border-radius: 16px; border:1px solid rgba(255,255,255,.2); box-shadow:0 18px 45px rgba(0,0,0,0.5); padding: 28px; color:#fff;">
+            <h2 style="text-align:center; margin-bottom:18px;">Welcome to ResearchPortal</h2>
+            <div style="display:flex; justify-content:space-around; margin-bottom: 16px;">
+                <button id="loginTab" style="flex:1;margin-right:8px;padding:10px;border:none;border-radius:8px;background:#00bcd4;color:#000;cursor:pointer;">Loginවිට
+
+            <div id="authForm">
+                <input id="authUsername" placeholder="Username" style="width:100%;padding:10px;margin-bottom:10px;border-radius:8px;border:1px solid #ccc;">
+                <input id="authPassword" type="password" placeholder="Password" style="width:100%;padding:10px;margin-bottom:16px;border-radius:8px;border:1px solid #ccc;">
+                <button id="authSubmit" style="width:100%;padding:12px;border:none;border-radius:8px;background:#ff6f61;color:#fff;font-weight:700;cursor:pointer;">Login</button>
+                <p id="authMessage" style="margin-top:12px;color:#ff8c70;text-align:center; min-height:22px;"></p>
+            </div>
+        </div>
+    </div>
+
+    <div id="mainApp" style="display:none;">
+    <!-- NAVBAR -->
+    <nav>
+        <div class="logo">ResearchPortal</div>
+        <ul>
+            <li><a href="{{ url_for('home') }}">Home</a></li>
+            <li><a href="{{ url_for('about') }}">About</a></li>
+            <li><a href="{{ url_for('features') }}">Features</a></li>
+            <li><a href="{{ url_for('upload') }}">Upload</a></li>
+            <li><a href="{{ url_for('qa') }}">Q&A</a></li>
+            <li><a href="{{ url_for('visualization') }}">Visualization</a></li>
+        </ul>
+        <button id="loginBtn">Login</button>
+    </nav>
+
+    {% block content %}{% endblock %}
+
+    <!-- FOOTER -->
+    <footer>
+        &copy; 2025 ResearchPortal |
+        <a href="#">GitHub</a> |
+        <a href="#">LinkedIn</a> |
+        <a href="#">Twitter</a>
+    </footer>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>
+
