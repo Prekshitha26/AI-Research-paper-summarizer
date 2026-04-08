@@ -1,0 +1,252 @@
+{% extends "base.html" %}
+
+{% block title %}Upload • ResearchPortal{% endblock %}
+
+{% block content %}
+<section class="upload-section">
+    <div class="upload-panel">
+        <div class="upload-headline">
+            <span class="eyebrow">Upload</span>
+            <h1>Upload Your Research Paper</h1>
+            <p>Drop a PDF and generate a polished AI summary in English or Hindi with the same modern ResearchPortal style.</p>
+        </div>
+
+        <div class="upload-topbar">
+            <div class="upload-pill">Upload</div>
+            <div class="topic-row">
+                <div class="topic-panel-row">
+                    <label for="topicSelect">Select Topic</label>
+                    <select id="topicSelect" disabled>
+                        <option value="">Upload a PDF to load topics</option>
+                    </select>
+                </div>
+                <button id="showSummaryButton" class="btn-primary btn-inline" type="button" onclick="showTopicSummary()" disabled>Show Summary</button>
+            </div>
+        </div>
+
+        <form id="uploadForm" method="POST" enctype="multipart/form-data" class="upload-form">
+{{ csrf_token() if csrf_token else '' }}
+            <label class="upload-card" id="uploadCard">
+                <div class="upload-card-inner">
+                    <div class="upload-icon"><i class="fa-solid fa-cloud-arrow-up"></i></div>
+                    <div class="upload-copy">
+                        <strong>Drag & drop your PDF here</strong>
+                        <p>or click to browse your document</p>
+                    </div>
+                </div>
+                <input type="file" id="pdfFile" name="file" accept=".pdf" required>
+            </label>
+        </form>
+
+        <div class="upload-hints">
+            <span><strong>PDF only</strong> for best results</span>
+            <span><strong>Language:</strong> English / Hindi</span>
+        </div>
+
+        <div class="progress-container" id="progressContainer" style="display:none;">
+            <div class="progress-bar" id="progressBar"></div>
+        </div>
+
+        <div class="summary-card" id="summarySection" style="display:none;">
+            <div class="summary-header">
+                <div>
+                    <span class="eyebrow">Research Summary</span>
+                    <h3 id="summaryTitle">Summary</h3>
+                </div>
+                <button id="langToggle" class="language-toggle" type="button" onclick="toggleLanguage()">हिंदी (Hindi)</button>
+            </div>
+
+            <div id="summaryContent" class="summary-content"></div>
+
+            <div class="summary-actions">
+                <button id="readAloudBtn" class="btn-secondary" type="button" onclick="toggleReadAloud()">
+                    <i class="fa-solid fa-volume-high"></i><span id="readStatus"> Read Aloud</span>
+                </button>
+                <button class="btn-primary btn-full btn-inline" type="button" onclick="downloadSummary()">
+                    <i class="fa-solid fa-download"></i> Download PDF
+                </button>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+let topics = {};
+let currentSummary = '';
+let originalSummary = '';
+let isHindi = false;
+let readAloudActive = false;
+let currentUtterance = null;
+
+const uploadCard = document.getElementById('uploadCard');
+const fileInput = document.getElementById('pdfFile');
+const progressContainer = document.getElementById('progressContainer');
+const progressBar = document.getElementById('progressBar');
+const topicSelect = document.getElementById('topicSelect');
+const showSummaryButton = document.getElementById('showSummaryButton');
+const summarySection = document.getElementById('summarySection');
+const summaryContent = document.getElementById('summaryContent');
+const langToggle = document.getElementById('langToggle');
+const readAloudBtn = document.getElementById('readAloudBtn');
+const readStatus = document.getElementById('readStatus');
+const summaryTitle = document.getElementById('summaryTitle');
+
+uploadCard.addEventListener('click', () => fileInput.click());
+uploadCard.addEventListener('dragover', (e) => {
+    e.preventDefault();
+    uploadCard.classList.add('upload-hover');
+});
+uploadCard.addEventListener('dragleave', (e) => {
+    e.preventDefault();
+    uploadCard.classList.remove('upload-hover');
+});
+uploadCard.addEventListener('drop', (e) => {
+    e.preventDefault();
+    uploadCard.classList.remove('upload-hover');
+    fileInput.files = e.dataTransfer.files;
+    handleFile();
+});
+fileInput.addEventListener('change', handleFile);
+
+function handleFile() {
+    const file = fileInput.files[0];
+    if (!file) return;
+
+    progressContainer.style.display = 'block';
+    progressBar.style.width = '0%';
+    summarySection.style.display = 'none';
+    showSummaryButton.disabled = true;
+    topicSelect.disabled = true;
+
+    let width = 0;
+    const interval = setInterval(() => {
+        if (width >= 100) {
+            clearInterval(interval);
+            const formData = new FormData();
+            formData.append('file', file);
+            fetch('/upload', { method: 'POST', body: formData })
+            .then(res => res.json())
+            .then(data => {
+                topicSelect.innerHTML = '';
+                data.topics.forEach(t => {
+                    const opt = document.createElement('option');
+                    opt.value = t;
+                    opt.textContent = t;
+                    topicSelect.appendChild(opt);
+                });
+                topicSelect.disabled = false;
+                showSummaryButton.disabled = false;
+                topics = data.topics.reduce((acc, t) => ({...acc, [t]: ''}), {});
+            });
+        } else {
+            width += 12;
+            progressBar.style.width = width + '%';
+        }
+    }, 125);
+}
+
+function showTopicSummary() {
+    const topic = topicSelect.value;
+    if (!topic) return;
+
+    fetch('/summary', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({topic})
+    })
+    .then(res => res.json())
+    .then(data => {
+        originalSummary = data.summary || 'No summary available.';
+        currentSummary = originalSummary;
+        isHindi = false;
+        langToggle.textContent = 'हिंदी (Hindi)';
+        langToggle.classList.remove('active');
+        summaryTitle.textContent = 'Summary';
+        displaySummary(currentSummary);
+        summarySection.style.display = 'block';
+    });
+}
+
+function toggleLanguage() {
+    if (!originalSummary) return;
+
+    if (!isHindi) {
+        fetch('/translate_summary', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({summary: originalSummary})
+        })
+        .then(res => res.json())
+        .then(data => {
+            currentSummary = data.hindi_summary || originalSummary;
+            isHindi = true;
+            langToggle.textContent = 'English';
+            langToggle.classList.add('active');
+            summaryTitle.textContent = 'सारांश';
+            displaySummary(currentSummary);
+        });
+    } else {
+        isHindi = false;
+        currentSummary = originalSummary;
+        langToggle.textContent = 'हिंदी (Hindi)';
+        langToggle.classList.remove('active');
+        summaryTitle.textContent = 'Summary';
+        displaySummary(currentSummary);
+    }
+}
+
+function displaySummary(text) {
+    summaryContent.innerHTML = formatSummary(text);
+}
+
+function toggleReadAloud() {
+    if (!readAloudActive) {
+        const text = summaryContent.textContent;
+        if (!text) return;
+
+        currentUtterance = new SpeechSynthesisUtterance(text);
+        currentUtterance.rate = 0.95;
+        currentUtterance.onend = () => {
+            readAloudActive = false;
+            readStatus.textContent = 'Read Aloud';
+            readAloudBtn.classList.remove('active');
+        };
+        speechSynthesis.speak(currentUtterance);
+        readAloudActive = true;
+        readStatus.textContent = 'Stop';
+        readAloudBtn.classList.add('active');
+    } else {
+        speechSynthesis.cancel();
+        readAloudActive = false;
+        readStatus.textContent = 'Read Aloud';
+        readAloudBtn.classList.remove('active');
+    }
+}
+
+function downloadSummary() {
+    const topic = topicSelect.value || 'summary';
+    fetch('/generate_pdf', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({summary: currentSummary})
+    })
+    .then(response => response.blob())
+    .then(blob => {
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `summary_${topic.replace(/\s+/g, '_')}_${isHindi ? 'hindi' : 'english'}.pdf`;
+        a.click();
+        URL.revokeObjectURL(url);
+    });
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    setActiveNav('upload');
+});
+</script>
+{% endblock %}
+
+

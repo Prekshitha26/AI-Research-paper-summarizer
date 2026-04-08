@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+
+{% block title %}Home • ResearchPortal{% endblock %}
+
+{% block content %}
+<section class="hero hero-split">
+    <div class="hero-panel">
+        <span class="eyebrow">Research Paper Summarizer</span>
+        <h1>Turn research papers into clear AI summaries.</h1>
+        <p>Upload your document, generate concise summaries, ask questions, and explore visual insights in one secure dashboard.</p>
+        <div class="hero-actions">
+            <a href="{{ url_for('upload') }}" class="btn-primary">Upload Paper</a>
+            <a href="{{ url_for('features') }}" class="btn-secondary">View Features</a>
+        </div>
+    </div>
+    <div class="hero-panel hero-panel--card">
+        <div class="content-card">
+            <h2>Dashboard Access</h2>
+            <p>ResearchPortal helps you read academic papers faster with a polished dark theme, modern card layout, and AI-driven workflow.</p>
+            <ul>
+                <li>Smart PDF extraction</li>
+                <li>Topic-based summaries</li>
+                <li>Interactive Q&A</li>
+            </ul>
+        </div>
+    </div>
+</section>
+
+<section class="section section--split">
+    <div class="section-panel">
+        <span class="eyebrow">Built for research clarity</span>
+        <h2>Understand papers faster with focused AI insights.</h2>
+        <p>Whether you are reviewing a lab report, literature survey, or conference paper, ResearchPortal gives you the context you need in minutes instead of hours.</p>
+        <ul class="feature-list">
+            <li><strong>Extract key ideas:</strong> Get the main contributions, methods, and results from any research document.</li>
+            <li><strong>Study smarter:</strong> Review summaries by section so you can retain critical findings without re-reading every page.</li>
+            <li><strong>Ask questions:</strong> Query the paper directly and receive clear answers based on the original text.</li>
+        </ul>
+    </div>
+    <div class="section-panel">
+        <div class="content-card">
+            <h3>Why this project works</h3>
+            <p>This project is designed to support academic workflows with a clean interface, reliable extraction, and AI-powered reasoning.</p>
+            <div class="home-quickpoints">
+                <div>
+                    <h4>1. Upload</h4>
+                    <p>Add your research paper and let the system identify structure automatically.</p>
+                </div>
+                <div>
+                    <h4>2. Summarize</h4>
+                    <p>Receive compact, usable summaries for each chapter or section.</p>
+                </div>
+                <div>
+                    <h4>3. Explore</h4>
+                    <p>Ask follow-up questions and compare insights from the same source material.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section">
+    <h2>Core capabilities for research students</h2>
+    <div class="features-container">
+        <div class="feature-card">
+            <h3>PDF Extraction</h3>
+            <p>Automatically extract text, headings, and tables from uploaded PDFs for fast review.</p>
+        </div>
+        <div class="feature-card">
+            <h3>Targeted Summaries</h3>
+            <p>Get condensed summaries that preserve technical detail and research insights.</p>
+        </div>
+        <div class="feature-card">
+            <h3>AI Question Answering</h3>
+            <p>Ask specific research questions and get precise, context-aware answers.</p>
+        </div>
+        <div class="feature-card">
+            <h3>Reference Support</h3>
+            <p>Focus on important citations and related work without losing the main argument.</p>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    setActiveNav('home');
+});
+</script>
+{% endblock %}
+

@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block title %}Sign Up • ResearchPortal{% endblock %}
+
+{% block content %}
+<section class="auth-page">
+    <div class="auth-card auth-card-split">
+        <div class="auth-side auth-side--brand">
+            <div class="auth-brand">
+                <span class="brand-mark">RP</span>
+                <div>
+                    <h1>ResearchPortal</h1>
+                    <p>Secure research paper summarization with easy signup.</p>
+                </div>
+            </div>
+            <div class="auth-welcome">
+                <h2>Join ResearchPortal</h2>
+                <p>Create your account and unlock upload, Q&A, and visual insights.</p>
+            </div>
+        </div>
+        <div class="auth-side auth-side--form">
+            <div class="auth-top">
+                <span class="auth-label">Create account</span>
+                <a class="btn-secondary btn-sm" href="{{ url_for('login') }}">Login</a>
+            </div>
+            <h2 class="section-title-sm">Sign Up</h2>
+            <form method="POST" action="{{ url_for('signup') }}">
+{{ csrf_token() if csrf_token else '' }}
+                <div class="form-field">
+                    <label for="name">Full Name</label>
+                    <input type="text" id="name" name="name" placeholder="Enter your full name" autocomplete="name" required>
+                </div>
+                <div class="form-field">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" name="email" placeholder="you@gmail.com" autocomplete="email" required>
+                </div>
+                <div class="form-field">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" placeholder="Create a password" autocomplete="new-password" required>
+                </div>
+                <div class="form-field">
+                    <label for="confirm_password">Confirm Password</label>
+                    <input type="password" id="confirm_password" name="confirm_password" placeholder="Repeat password" autocomplete="new-password" required>
+                </div>
+                {% with messages = get_flashed_messages() %}
+                  {% if messages %}
+                    <p class="alert-text">{{ messages[0] }}</p>
+                  {% endif %}
+                {% endwith %}
+                <button type="submit" class="btn-primary btn-full">Sign Up</button>
+            </form>
+            <p class="form-note">
+                Already have an account? <a href="{{ url_for('login') }}">Log in here</a>
+            </p>
+        </div>
+    </div>
+</section>
+{% endblock %}

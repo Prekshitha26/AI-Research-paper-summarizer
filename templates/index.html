@@ -1,0 +1,971 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Research Paper Analyzer</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0f0f23, #1a1a2e);
+            color: #e0e0e0;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        /* NAVBAR */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 50px;
+            background: linear-gradient(90deg, #16213e, #0f3460);
+            color: #fff;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+        }
+
+        nav .logo {
+            font-size: 1.8em;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        nav ul {
+            display: flex;
+            gap: 25px;
+            list-style: none;
+        }
+
+        nav ul li {
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        nav ul li:hover {
+            color: #00bcd4;
+        }
+
+        nav button {
+            padding: 8px 18px;
+            border: none;
+            background: #ff6f61;
+            color: #fff;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        nav button:hover {
+            background: #ff8c70;
+        }
+
+        /* HERO */
+        .hero {
+            position: relative;
+            height: 90vh;
+            background: url('/static/hero3.jpg') center/cover no-repeat;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #fff;
+            text-align: center;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(18, 25, 102, 0.7);
+            opacity: 0.5;
+        }
+
+        .hero-content {
+            position: relative;
+            max-width: 900px;
+            animation: fadeInUp 1.2s ease;
+        }
+
+        .hero h1 {
+            font-size: 3em;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 15px rgba(0, 0, 0, 0.5);
+        }
+
+        .hero p {
+            font-size: 1.3em;
+            margin-bottom: 30px;
+        }
+
+        .hero button {
+            padding: 15px 35px;
+            font-size: 1.1em;
+            border-radius: 10px;
+            background: #00bcd4;
+            color: #fff;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .hero button:hover {
+            background: #0097a7;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
+        }
+
+        @keyframes fadeInUp {
+            0% {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* SECTIONS */
+        section {
+            padding: 80px 50px;
+            position: relative;
+        }
+
+        section h2 {
+            text-align: center;
+            font-size: 2.5em;
+            margin-bottom: 50px;
+            color: #1a237e;
+        }
+
+        /* FEATURES */
+        .features-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+        }
+
+            .feature-card {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            padding: 35px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            transition: 0.5s;
+            transform-style: preserve-3d;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px) rotateY(10deg);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
+        }
+
+        .feature-card i {
+            font-size: 3.2em;
+            color: #00bcd4;
+            margin-bottom: 20px;
+            transition: 0.3s;
+        }
+
+        .feature-card:hover i {
+            color: #ff6f61;
+        }
+
+        .feature-card h3 {
+            font-size: 1.5em;
+            margin-bottom: 15px;
+        }
+
+        .feature-card p {
+            color: #555;
+        }
+
+        /* UPLOAD */
+        .upload-section {
+            background: linear-gradient(135deg, #0a198a, #0a1168);
+            color: #ffffff;
+            padding: 60px;
+            background: url('/static/hero2.jpg');
+            text-align: center;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .upload-section h2 {
+            color: #ffffff;
+            margin-bottom: 40px;
+            font-size: 2.2em;
+        }
+
+        .upload-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px dashed rgba(255, 255, 255, 0.4);
+            border-radius: 20px;
+            padding: 50px;
+            cursor: pointer;
+            transition: 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .upload-card:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .upload-card input[type="file"] {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        .upload-icon i {
+            font-size: 3.5em;
+            color: #00bcd4;
+            margin-bottom: 20px;
+            transition: 0.3s;
+        }
+
+        .upload-card:hover .upload-icon i {
+            color: #ff6f61;
+        }
+
+        .upload-card p {
+            font-size: 1.2em;
+            line-height: 1.5;
+        }
+
+        .progress-container {
+            width: 80%;
+            margin: 30px auto 0 auto;
+            height: 15px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 15px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            width: 0;
+            height: 100%;
+            background: #00bcd4;
+            border-radius: 15px;
+            transition: width 0.5s;
+        }
+
+        .summary {
+            text-align: left;
+            margin-top: 30px;
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(15px);
+            color: #e0e0e0;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .summary h3 {
+            margin-bottom: 15px;
+            color: #1a237e;
+        }
+
+        #topicSection {
+            margin-top: 30px;
+        }
+
+        #topicSection select,
+        #topicSection button {
+            font-size: 1em;
+            padding: 10px;
+            border-radius: 10px;
+            border: none;
+            margin-left: 10px;
+            cursor: pointer;
+        }
+
+        /* CHAT */
+        #chatSection {
+            margin-top: 30px;
+            text-align: center;
+        }
+
+        #chatSection h3 {
+            color: #fff;
+            margin-bottom: 15px;
+        }
+
+        #chatBox {
+            background: #fff;
+            color: #333;
+            padding: 20px;
+            height: 380px;
+            border-radius: 15px;
+            overflow-y: auto;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            margin-bottom: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .chat-message {
+            max-width: 70%;
+            padding: 10px 15px;
+            border-radius: 15px;
+            font-size: 0.95em;
+            line-height: 1.4;
+            display: inline-block;
+            word-wrap: break-word;
+        }
+
+        .chat-user {
+            align-self: flex-end;
+            background: #00bcd4;
+            color: #fff;
+            border-bottom-right-radius: 5px;
+        }
+
+        .chat-ai {
+            align-self: flex-start;
+            background: #f1f1f1;
+            color: #333;
+            border-bottom-left-radius: 5px;
+        }
+
+        #chatInput {
+            width: 70%;
+            padding: 10px 15px;
+            border-radius: 10px;
+            border: none;
+            margin-right: 10px;
+        }
+
+        #chatSection button {
+            padding: 10px 20px;
+            border-radius: 10px;
+            border: none;
+            background: #00bcd4;
+            color: #fff;
+            cursor: pointer;
+        }
+
+        /* VISUALIZATION */
+        #charts-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .chart-card {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(15px);
+            padding: 25px;
+            border-radius: 20px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+            transition: 0.3s;
+            text-align: left;
+            height: 400px;
+            display: flex;
+            flex-direction: column;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .chart-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.5);
+        }
+
+        .chart-card h3 {
+            margin-bottom: 20px;
+            color: #fff;
+            font-size: 1.3em;
+        }
+
+        .chart-wrapper {
+            flex: 1;
+            position: relative;
+            height: 100%;
+            min-height: 300px;
+        }
+
+        .chart-wrapper canvas {
+            max-height: 100% !important;
+            width: 100% !important;
+        }
+
+        /* ABOUT */
+        #about p {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+            line-height: 1.8;
+        }
+
+        /* FOOTER */
+        footer {
+            background: linear-gradient(90deg, #1a237e, #283593);
+            color: #fff;
+            text-align: center;
+            padding: 35px;
+        }
+
+        footer a {
+            color: #ff6f61;
+            margin: 0 10px;
+            text-decoration: none;
+            font-size: 1.2em;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* RESPONSIVE */
+        @media(max-width:768px) {
+            nav {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .hero h1 {
+                font-size: 2.2em;
+            }
+
+            .hero p {
+                font-size: 1.1em;
+            }
+
+            section {
+                padding: 60px 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- AUTH MODAL -->
+    <div id="authSection" style="position:fixed; inset:0; display:flex; justify-content:center; align-items:center; background:rgba(0,0,0,0.75); z-index:2000;">
+        <div style="width: 360px; background:#0d1b51; border-radius: 16px; border:1px solid rgba(255,255,255,.2); box-shadow:0 18px 45px rgba(0,0,0,0.5); padding: 28px; color:#fff;">
+            <h2 style="text-align:center; margin-bottom:18px;">Welcome to ResearchPortal</h2>
+            <div style="display:flex; justify-content:space-around; margin-bottom: 16px;">
+                <button id="loginTab" style="flex:1;margin-right:8px;padding:10px;border:none;border-radius:8px;background:#00bcd4;color:#000;cursor:pointer;">Login</button>
+                <button id="signupTab" style="flex:1;padding:10px;border:none;border-radius:8px;background:#fff;color:#000;cursor:pointer;">Sign Up</button>
+            </div>
+            <div id="authForm">
+                <input id="authUsername" placeholder="Username" style="width:100%;padding:10px;margin-bottom:10px;border-radius:8px;border:1px solid #ccc;">
+                <input id="authPassword" type="password" placeholder="Password" style="width:100%;padding:10px;margin-bottom:16px;border-radius:8px;border:1px solid #ccc;">
+                <button id="authSubmit" style="width:100%;padding:12px;border:none;border-radius:8px;background:#ff6f61;color:#fff;font-weight:700;cursor:pointer;">Login</button>
+                <p id="authMessage" style="margin-top:12px;color:#ff8c70;text-align:center; min-height:22px;"></p>
+            </div>
+        </div>
+    </div>
+
+    <div id="mainApp" style="display:none;">
+    <!-- NAVBAR -->
+    <nav>
+        <div class="logo">ResearchPortal</div>
+        <ul>
+            <li>Home</li>
+            <li>Features</li>
+            <li>Upload</li>
+            <li>Visualizations</li>
+            <li>About</li>
+            <li>Contact</li>
+        </ul>
+        <button id="loginBtn">Login</button>
+    </nav>
+
+    <!-- HERO -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Effortless Research Paper Analysis</h1>
+            <p>Upload, summarize, and explore insights from academic papers using AI-powered tools.</p>
+            <button onclick="document.getElementById('uploadSection').scrollIntoView({behavior:'smooth'})">Upload
+                Paper</button>
+        </div>
+    </section>
+
+    <!-- ABOUT -->
+    <section id="about">
+        <h2>About The Project</h2>
+        <p>This project leverages AI and NLP to analyze research papers, generate summaries, extract keywords, and
+            visualize trends.</p>
+
+    </section>
+
+    <!-- UPLOAD -->
+    <section id="uploadSection" class="upload-section">
+        <h2>Upload Your Research Paper</h2>
+        <div class="upload-card" id="uploadCard">
+            <div class="upload-icon"><i class="fa-solid fa-cloud-arrow-up"></i></div>
+            <p>Drag & Drop your PDF here<br>or click to browse</p>
+        </div>
+        <input type="file" id="pdfFile" accept=".pdf" style="display:none;">
+
+        <div class="progress-container" id="progressContainer" style="display:none;">
+            <div class="progress-bar" id="progressBar"></div>
+        </div>
+
+        <!-- Topics Dropdown -->
+        <div id="topicSection" style="display:none;">
+            <label for="topicSelect" style="color:#fff;font-size:1.2em;">Select Topic:</label>
+            <select id="topicSelect"></select>
+            <button onclick="showTopicSummary()">Show Summary</button>
+        </div>
+
+        <!-- Summary -->
+        <div class="summary" id="summarySection" style="display:none;">
+            <h3>Summary</h3>
+            <p id="summaryContent"></p>
+            <div style="margin-top: 20px;">
+                <button id="readAloudBtn" onclick="toggleReadAloud()" style="background: #ff6b6b; color: white; padding: 10px 20px; border: none; border-radius: 25px; cursor: pointer; margin-right: 10px;">
+                    <i class="fa-solid fa-volume-high"></i> <span id="readStatus">Read Aloud</span>
+                </button>
+                <button onclick="downloadSummary()" style="background: #4ecdc4; color: white; padding: 10px 20px; border: none; border-radius: 25px; cursor: pointer;">
+                    <i class="fa-solid fa-download"></i> Download PDF
+                </button>
+            </div>
+        </div>
+
+        <!-- Chat -->
+        <div id="chatSection" style="display:none;">
+            <h3>Ask Questions About This Research Paper</h3>
+            <div id="chatBox" style="height: 500px;"></div>
+            <div style="margin-top:10px;">
+                <input type="text" id="chatInput" placeholder="Type your question...">
+                <button onclick="sendChat()">Send</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- FEATURES -->
+    <section id="features">
+        <h2>Key Features</h2>
+        <div class="features-container">
+            <div class="feature-card"><i class="fa-solid fa-file-pdf"></i>
+                <h3>PDF Analysis</h3>
+                <p>Analyze PDFs instantly with AI tools.</p>
+            </div>
+            <div class="feature-card"><i class="fa-solid fa-file-lines"></i>
+                <h3>Summary Generation</h3>
+                <p>Generate detailed summaries for each topic.</p>
+            </div>
+            <div class="feature-card"><i class="fa-solid fa-chart-simple"></i>
+                <h3>Topic Modeling</h3>
+                <p>Discover key topics and trends from papers.</p>
+            </div>
+            <div class="feature-card"><i class="fa-solid fa-key"></i>
+                <h3>Citation Extraction</h3>
+                <p>Organize references and citations quickly.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- VISUALIZATIONS -->
+    <section id="visualizations">
+        <h2>Analysis Visualizations</h2>
+        <div id="charts-container">
+            <div class="chart-card">
+                <h3>Keyword Frequency</h3>
+                <div class="chart-wrapper">
+                    <canvas id="keywordChart"></canvas>
+                </div>
+            </div>
+            <div class="chart-card">
+                <h3>Topic Trend Chart</h3>
+                <canvas id="topicTrendChart" height="280"></canvas>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        &copy; 2025 ResearchPortal |
+        <a href="#">GitHub</a> |
+        <a href="#">LinkedIn</a> |
+        <a href="#">Twitter</a>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // Demo topics for uploaded PDF
+        let topics = {};
+        let keywordChart = null;
+        let topicTrendChart = null;
+        const authSection = document.getElementById('authSection');
+        const mainApp = document.getElementById('mainApp');
+        const loginBtn = document.getElementById('loginBtn');
+        const loginTab = document.getElementById('loginTab');
+        const signupTab = document.getElementById('signupTab');
+        const authSubmit = document.getElementById('authSubmit');
+        const authMessage = document.getElementById('authMessage');
+        const authUsername = document.getElementById('authUsername');
+        const authPassword = document.getElementById('authPassword');
+
+        const uploadCard = document.getElementById('uploadCard');
+        const fileInput = document.getElementById('pdfFile');
+        const progressContainer = document.getElementById('progressContainer');
+        const progressBar = document.getElementById('progressBar');
+        const topicSection = document.getElementById('topicSection');
+        const topicSelect = document.getElementById('topicSelect');
+        const summarySection = document.getElementById('summarySection');
+        const summaryContent = document.getElementById('summaryContent');
+        const chatSection = document.getElementById('chatSection');
+        const chatBox = document.getElementById('chatBox');
+        const chatInput = document.getElementById('chatInput');
+
+        function isLoggedIn() {
+            return localStorage.getItem('researchportal_logged_in') === 'true';
+        }
+
+        function setLoggedIn(status) {
+            localStorage.setItem('researchportal_logged_in', status ? 'true' : 'false');
+            toggleMainApp();
+        }
+
+        function toggleMainApp() {
+            if (isLoggedIn()) {
+                authSection.style.display = 'none';
+                mainApp.style.display = 'block';
+                loginBtn.textContent = 'Logout';
+            } else {
+                authSection.style.display = 'flex';
+                mainApp.style.display = 'none';
+                loginBtn.textContent = 'Login';
+            }
+        }
+
+        function initAuthMode(mode) {
+            if (mode === 'signup') {
+                signupTab.style.background = '#00bcd4';
+                signupTab.style.color = '#000';
+                loginTab.style.background = '#fff';
+                loginTab.style.color = '#000';
+                authSubmit.textContent = 'Sign Up';
+                authMessage.textContent = '';
+            } else {
+                loginTab.style.background = '#00bcd4';
+                loginTab.style.color = '#000';
+                signupTab.style.background = '#fff';
+                signupTab.style.color = '#000';
+                authSubmit.textContent = 'Login';
+                authMessage.textContent = '';
+            }
+        }
+
+        loginTab.addEventListener('click', () => initAuthMode('login'));
+        signupTab.addEventListener('click', () => initAuthMode('signup'));
+
+        authSubmit.addEventListener('click', () => {
+            const username = authUsername.value.trim();
+            const password = authPassword.value.trim();
+            if (!username || !password) {
+                authMessage.textContent = 'Username and password are required.';
+                return;
+            }
+            const users = JSON.parse(localStorage.getItem('researchportal_users') || '{}');
+            if (authSubmit.textContent === 'Sign Up') {
+                if (users[username]) {
+                    authMessage.textContent = 'User already exists. Please login.';
+                    return;
+                }
+                users[username] = password;
+                localStorage.setItem('researchportal_users', JSON.stringify(users));
+                authMessage.textContent = 'Signup successful. Please login now.';
+                initAuthMode('login');
+                authUsername.value = '';
+                authPassword.value = '';
+                return;
+            }
+            // Login
+            if (users[username] === password) {
+                setLoggedIn(true);
+                authMessage.textContent = '';
+                authUsername.value = '';
+                authPassword.value = '';
+                return;
+            }
+            authMessage.textContent = 'Invalid credentials. Try again.';
+        });
+
+        loginBtn.addEventListener('click', () => {
+            if (isLoggedIn()) {
+                setLoggedIn(false);
+            } else {
+                authSection.style.display = 'flex';
+            }
+        });
+
+        window.addEventListener('DOMContentLoaded', () => {
+            if (!isLoggedIn()) {
+                initAuthMode('login');
+            }
+            toggleMainApp();
+        });
+
+        uploadCard.addEventListener('click', () => fileInput.click());
+        fileInput.addEventListener('change', handleFile);
+
+        uploadCard.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadCard.style.background = 'rgba(255,255,255,0.15)';
+        });
+
+        uploadCard.addEventListener('dragleave', (e) => {
+            e.preventDefault();
+            uploadCard.style.background = 'rgba(255,255,255,0.05)';
+        });
+
+        uploadCard.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadCard.style.background = 'rgba(255,255,255,0.05)';
+            fileInput.files = e.dataTransfer.files;
+            handleFile();  // ✅ only here for drag-drop
+        });
+
+        function handleFile() {
+            const file = fileInput.files[0];
+            if(!file) return;
+            progressContainer.style.display = 'block';
+            progressBar.style.width = '0%';
+            topicSection.style.display = 'none';
+            summarySection.style.display = 'none';
+            chatSection.style.display = 'none';
+
+            let width = 0;
+            const interval = setInterval(() => {
+                if (width >= 100) {
+                    clearInterval(interval);
+                    // Demo topics and summaries
+
+                    // Send file to Flask backend
+                    const formData = new FormData();
+                    formData.append('file', file);
+
+                    fetch('/upload', { method: 'POST', body: formData })
+                        .then(res => res.json())
+                        .then(data => {
+                            topicSelect.innerHTML = '';
+                            data.topics.forEach(t => {
+                                let opt = document.createElement('option');
+                                opt.value = t;
+                                opt.innerText = t;
+                                topicSelect.appendChild(opt);
+                            });
+                            topicSection.style.display = 'block';
+                            topics = {};
+                            data.topics.forEach(t => topics[t] = '');
+                            updateCharts();  // Real backend data
+                        });
+
+
+                } else {
+                    width += 10;
+                    progressBar.style.width = width + '%';
+                }
+            }, 200);
+        }
+
+        function formatSummary(text) {
+            return text
+                .replace(/^### (.*$)/gim, '<h4>$1</h4>')
+                .replace(/^## (.*$)/gim, '<h3>$1</h3>')
+                .replace(/^# (.*$)/gim, '<h2>$1</h2>')
+                .replace(/^- (.*$)/gim, '<ul><li>$1</li></ul>')
+                .replace(/^\d+\. (.*$)/gim, '<ol><li>$1</li></ol>')
+                .replace(/\n\n/g, '<br><br>');
+        }
+
+function showTopicSummary(){
+            const topic = topicSelect.value;
+            fetch('/summary', {
+              method:'POST',
+              headers:{'Content-Type':'application/json'},
+              body: JSON.stringify({topic})
+            })
+            .then(res=>res.json())
+            .then(data=>{
+              const raw = data.summary || "No summary available.";
+              summaryContent.innerHTML = formatSummary(raw);
+              summarySection.style.display = 'block';
+              chatSection.style.display = 'block';
+              chatBox.innerHTML = '';
+            });
+          }
+
+async function updateCharts(){
+            if (keywordChart) keywordChart.destroy();
+            if (topicTrendChart) topicTrendChart.destroy();
+            
+            try {
+                const response = await fetch('/analyze');
+                const data = await response.json();
+                
+                if (data.error) {
+                    console.error(data.error);
+                    return;
+                }
+                
+                // Keywords
+                const keywordLabels = data.keywords.map(([word]) => word);
+                const keywordValues = data.keywords.map(([, count]) => count);
+                
+                const keywordCtx = document.getElementById('keywordChart').getContext('2d');
+                keywordChart = new Chart(keywordCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: keywordLabels,
+                        datasets: [{
+                            label: 'Frequency',
+                            data: keywordValues,
+                            backgroundColor: 'rgba(0, 188, 212, 0.8)',
+                            borderColor: 'rgba(0, 188, 212, 1)',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: { 
+                        responsive: true,
+                        maintainAspectRatio: false, 
+                        scales: { y: { beginAtZero: true } } 
+                    }
+                });
+                
+                // Topic trends
+                const trendCtx = document.getElementById('topicTrendChart').getContext('2d');
+                topicTrendChart = new Chart(trendCtx, {
+                    type: 'line',
+                    data: {
+                        labels: data.topics,
+                        datasets: [{
+                            label: 'Content %',
+                            data: data.trend_scores,
+                            backgroundColor: 'rgba(255, 111, 97, 0.3)',
+                            borderColor: 'rgba(255, 111, 97, 1)',
+                            tension: 0.4,
+                            fill: true
+                        }]
+                    },
+                    options: { 
+                        responsive: true,
+                        maintainAspectRatio: false, 
+                        scales: { y: { beginAtZero: true } } 
+                    }
+                });
+                
+            } catch (error) {
+                console.error('Chart update failed:', error);
+            }
+        }
+
+
+let readAloudActive = false;
+let currentUtterance = null;
+
+function toggleReadAloud() {
+    if (!readAloudActive) {
+        const text = summaryContent.textContent;
+        if (!text) return;
+        
+        currentUtterance = new SpeechSynthesisUtterance(text);
+        currentUtterance.rate = 0.9;
+        currentUtterance.onend = () => {
+            readAloudActive = false;
+            document.getElementById('readStatus').textContent = 'Read Aloud';
+            document.getElementById('readAloudBtn').style.background = '#ff6b6b';
+        };
+        speechSynthesis.speak(currentUtterance);
+        readAloudActive = true;
+        document.getElementById('readStatus').textContent = 'Stop (Speaking...)';
+        document.getElementById('readAloudBtn').style.background = '#f44336';
+    } else {
+        speechSynthesis.cancel();
+        readAloudActive = false;
+        document.getElementById('readStatus').textContent = 'Read Aloud';
+        document.getElementById('readAloudBtn').style.background = '#ff6b6b';
+    }
+}
+
+function downloadSummary(){
+    const topic = topicSelect.value;
+    const summaryText = summaryContent.textContent;
+    fetch('/generate_pdf', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({summary: summaryText})
+    })
+    .then(response => response.blob())
+    .then(blob => {
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `summary_${topic.replace(/\\s+/g, '_')}.pdf`;
+      document.body.appendChild(a);
+      a.click();
+      window.URL.revokeObjectURL(url);
+      document.body.removeChild(a);
+    });
+}
+
+        function sendChat(){
+            const msg = chatInput.value.trim();
+            if(!msg) return;
+          
+            // User message
+            const userMsg = document.createElement('div');
+            userMsg.className = 'chat-message chat-user';
+            userMsg.innerHTML = `<i class="fa-solid fa-user">  </i>  ${msg}`;
+            chatBox.appendChild(userMsg);
+
+            chatBox.scrollTop = chatBox.scrollHeight;
+            chatInput.value = '';
+          
+            fetch('/chat', {
+              method:'POST',
+              headers:{'Content-Type':'application/json'},
+              body: JSON.stringify({message: msg})
+            })
+            .then(res=>res.json())
+            .then(data=>{
+                const aiMsg = document.createElement('div');
+                aiMsg.className = 'chat-message chat-ai';
+                aiMsg.innerHTML = `<i class="fa-solid fa-robot"></i> ${data.response}`;
+                chatBox.appendChild(aiMsg);
+              chatBox.scrollTop = chatBox.scrollHeight;
+              chatInput.value = '';
+            });
+          }
+          
+    </script>
+
+</body>
+
+</html>

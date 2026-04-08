@@ -1,0 +1,165 @@
+[
+    {
+        "section": "Abstract",
+        "start": 587
+    },
+    {
+        "section": "Introduction",
+        "start": 2854
+    },
+    {
+        "section": "Background",
+        "start": 4778
+    },
+    {
+        "section": "Model Architecture",
+        "start": 6610
+    },
+    {
+        "section": "Figure 1: The Transformer - model architecture.",
+        "start": 7113
+    },
+    {
+        "section": "Model Architecture",
+        "subsection": "3.1 Encoder and Decoder Stacks",
+        "start": 7377
+    },
+    {
+        "section": "Model Architecture",
+        "subsection": "3.2 Attention",
+        "start": 8725
+    },
+    {
+        "section": "Scaled Dot-Product Attention",
+        "start": 8940
+    },
+    {
+        "section": "Model Architecture",
+        "subsection": "3.2.1 Scaled Dot-Product Attention",
+        "start": 9263
+    },
+    {
+        "section": "Model Architecture",
+        "subsection": "3.2.2 Multi-Head Attention",
+        "start": 10784
+    },
+    {
+        "section": "output values. These are concatenated and once again projected, resulting in the final values, as",
+        "start": 11422
+    },
+    {
+        "section": "Model Architecture",
+        "subsection": "3.2.3 Applications of Attention in our Model",
+        "start": 12198
+    },
+    {
+        "section": "Model Architecture",
+        "subsection": "3.3 Position-wise Feed-Forward Networks",
+        "start": 13410
+    },
+    {
+        "section": "Model Architecture",
+        "subsection": "3.4 Embeddings and Softmax",
+        "start": 14066
+    },
+    {
+        "section": "Table 1: Maximum path lengths, per-layer complexity and minimum number of sequential operations",
+        "start": 14592
+    },
+    {
+        "section": "Model Architecture",
+        "subsection": "3.5 Positional Encoding",
+        "start": 15100
+    },
+    {
+        "section": "Why Self-Attention",
+        "start": 16503
+    },
+    {
+        "section": "length nis smaller than the representation dimensionality d, which is most often the case with",
+        "start": 18041
+    },
+    {
+        "section": "Training",
+        "start": 19694
+    },
+    {
+        "section": "Table 1: Maximum path lengths, per-layer complexity and minimum number of sequential operations",
+        "subsection": "5.1 Training Data and Batching",
+        "start": 19764
+    },
+    {
+        "section": "English-French dataset consisting of 36M sentences and split tokens into a 32000 word-piece",
+        "start": 20081
+    },
+    {
+        "section": "Table 1: Maximum path lengths, per-layer complexity and minimum number of sequential operations",
+        "subsection": "5.2 Hardware and Schedule",
+        "start": 20389
+    },
+    {
+        "section": "Table 1: Maximum path lengths, per-layer complexity and minimum number of sequential operations",
+        "subsection": "5.3 Optimizer",
+        "start": 20814
+    },
+    {
+        "section": "Table 1: Maximum path lengths, per-layer complexity and minimum number of sequential operations",
+        "subsection": "5.4 Regularization",
+        "start": 21271
+    },
+    {
+        "section": "Table 2: The Transformer achieves better BLEU scores than previous state-of-the-art models on the",
+        "start": 21347
+    },
+    {
+        "section": "Results",
+        "start": 22499
+    },
+    {
+        "section": "length nis smaller than the representation dimensionality d, which is most often the case with",
+        "subsection": "6.1 Machine Translation",
+        "start": 22509
+    },
+    {
+        "section": "length nis smaller than the representation dimensionality d, which is most often the case with",
+        "subsection": "6.2 Model Variations",
+        "start": 24195
+    },
+    {
+        "section": "Table 3: Variations on the Transformer architecture. Unlisted values are identical to those of the base",
+        "start": 24497
+    },
+    {
+        "section": "length nis smaller than the representation dimensionality d, which is most often the case with",
+        "subsection": "6.3 English Constituency Parsing",
+        "start": 26332
+    },
+    {
+        "section": "Table 4: The Transformer generalizes well to English constituency parsing (Results are on Section 23",
+        "start": 27467
+    },
+    {
+        "section": "Conclusion",
+        "start": 28764
+    },
+    {
+        "section": "Attention Visualizations",
+        "start": 37038
+    },
+    {
+        "section": "making",
+        "start": 37173
+    },
+    {
+        "section": "making",
+        "start": 37367
+    },
+    {
+        "section": "Input-Input Layer5",
+        "start": 37851
+    },
+    {
+        "section": "Input-Input Layer5",
+        "start": 38666
+    }
+]
